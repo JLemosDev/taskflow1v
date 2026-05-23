@@ -1,5 +1,6 @@
 C:\Users\Lemos\OneDrive\Área de Trabalho\taskflow\src\main\java\com\taskflow\repository\ComentarioRepository.java
 C:\Users\Lemos\OneDrive\Área de Trabalho\taskflow\src\main\java\com\taskflow\repository\ProjetoRepository.java
+C:\Users\Lemos\OneDrive\Área de Trabalho\taskflow\src\main\java\com\taskflow\controller\ComentarioController.java
 C:\Users\Lemos\OneDrive\Área de Trabalho\taskflow\src\main\java\com\taskflow\dto\request\ProjetoRequestDTO.java
 C:\Users\Lemos\OneDrive\Área de Trabalho\taskflow\src\main\java\com\taskflow\exception\RegraDeNegocioException.java
 C:\Users\Lemos\OneDrive\Área de Trabalho\taskflow\src\main\java\com\taskflow\model\Usuario.java
@@ -16,7 +17,10 @@ C:\Users\Lemos\OneDrive\Área de Trabalho\taskflow\src\main\java\com\taskflow\dt
 C:\Users\Lemos\OneDrive\Área de Trabalho\taskflow\src\main\java\com\taskflow\dto\response\TarefaResponseDTO.java
 C:\Users\Lemos\OneDrive\Área de Trabalho\taskflow\src\main\java\com\taskflow\exception\GlobalExceptionHandler.java
 C:\Users\Lemos\OneDrive\Área de Trabalho\taskflow\src\main\java\com\taskflow\model\Tarefa.java
+C:\Users\Lemos\OneDrive\Área de Trabalho\taskflow\src\main\java\com\taskflow\config\DataLoader.java
 C:\Users\Lemos\OneDrive\Área de Trabalho\taskflow\src\main\java\com\taskflow\service\ProjetoService.java
+C:\Users\Lemos\OneDrive\Área de Trabalho\taskflow\src\main\java\com\taskflow\controller\ProjetoController.java
+C:\Users\Lemos\OneDrive\Área de Trabalho\taskflow\src\main\java\com\taskflow\controller\TarefaController.java
 C:\Users\Lemos\OneDrive\Área de Trabalho\taskflow\src\main\java\com\taskflow\exception\ConflitoException.java
 C:\Users\Lemos\OneDrive\Área de Trabalho\taskflow\src\main\java\com\taskflow\service\TarefaService.java
 C:\Users\Lemos\OneDrive\Área de Trabalho\taskflow\src\main\java\com\taskflow\dto\request\TarefaUpdateRequestDTO.java
@@ -26,4 +30,5 @@ C:\Users\Lemos\OneDrive\Área de Trabalho\taskflow\src\main\java\com\taskflow\se
 C:\Users\Lemos\OneDrive\Área de Trabalho\taskflow\src\main\java\com\taskflow\model\Projeto.java
 C:\Users\Lemos\OneDrive\Área de Trabalho\taskflow\src\main\java\com\taskflow\model\TaskStatus.java
 C:\Users\Lemos\OneDrive\Área de Trabalho\taskflow\src\main\java\com\taskflow\dto\response\ProjetoResponseDTO.java
+C:\Users\Lemos\OneDrive\Área de Trabalho\taskflow\src\main\java\com\taskflow\controller\UsuarioController.java
 C:\Users\Lemos\OneDrive\Área de Trabalho\taskflow\src\main\java\com\taskflow\service\ComentarioService.java
