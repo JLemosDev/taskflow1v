@@ -1,0 +1,413 @@
+{
+  "info": {
+    "name": "TaskFlow API",
+    "_postman_id": "taskflow-collection-2025",
+    "description": "Coleção completa de testes para a TaskFlow API - Programação II - FACOL",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Usuarios",
+      "item": [
+        {
+          "name": "Criar Usuario",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/usuarios", "host": ["{{baseUrl}}"], "path": ["api","usuarios"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Maria Oliveira\",\n  \"email\": \"maria.oliveira@email.com\",\n  \"role\": \"MEMBRO\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Listar Todos Usuarios",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/usuarios", "host": ["{{baseUrl}}"], "path": ["api","usuarios"] }
+          }
+        },
+        {
+          "name": "Buscar Usuario por ID",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/usuarios/1", "host": ["{{baseUrl}}"], "path": ["api","usuarios","1"] }
+          }
+        },
+        {
+          "name": "Atualizar Usuario",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/usuarios/1", "host": ["{{baseUrl}}"], "path": ["api","usuarios","1"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Ana Lima Atualizada\",\n  \"email\": \"ana.lima@taskflow.com\",\n  \"role\": \"GERENTE\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Excluir Usuario",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/api/usuarios/4", "host": ["{{baseUrl}}"], "path": ["api","usuarios","4"] }
+          }
+        },
+        {
+          "name": "[RN-U2] Excluir Usuario com Tarefas Ativas (erro esperado 400)",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/api/usuarios/1", "host": ["{{baseUrl}}"], "path": ["api","usuarios","1"] }
+          }
+        },
+        {
+          "name": "[RN-U1] Criar Usuario Email Duplicado (erro esperado 409)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/usuarios", "host": ["{{baseUrl}}"], "path": ["api","usuarios"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Copia\",\n  \"email\": \"ana.lima@taskflow.com\",\n  \"role\": \"MEMBRO\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Relatorio - Ranking por Andamento",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/usuarios/relatorios/ranking-andamento", "host": ["{{baseUrl}}"], "path": ["api","usuarios","relatorios","ranking-andamento"] }
+          }
+        },
+        {
+          "name": "Relatorio - Usuarios Sobrecarregados",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/usuarios/relatorios/sobrecarregados?limite=2", "host": ["{{baseUrl}}"], "path": ["api","usuarios","relatorios","sobrecarregados"], "query": [{ "key": "limite", "value": "2" }] }
+          }
+        },
+        {
+          "name": "Relatorio - Produtividade do Usuario",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/usuarios/2/relatorios/produtividade", "host": ["{{baseUrl}}"], "path": ["api","usuarios","2","relatorios","produtividade"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Projetos",
+      "item": [
+        {
+          "name": "Criar Projeto",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/projetos", "host": ["{{baseUrl}}"], "path": ["api","projetos"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Sistema de Relatorios\",\n  \"descricao\": \"Modulo de BI e dashboards\",\n  \"status\": \"PLANEJAMENTO\",\n  \"dataInicio\": \"2025-09-01\",\n  \"dataPrazo\": \"2026-01-31\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Listar Todos Projetos",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/projetos", "host": ["{{baseUrl}}"], "path": ["api","projetos"] }
+          }
+        },
+        {
+          "name": "Buscar Projeto por ID",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/projetos/1", "host": ["{{baseUrl}}"], "path": ["api","projetos","1"] }
+          }
+        },
+        {
+          "name": "Filtrar Projetos por Status",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/projetos/status?status=EM_ANDAMENTO", "host": ["{{baseUrl}}"], "path": ["api","projetos","status"], "query": [{ "key": "status", "value": "EM_ANDAMENTO" }] }
+          }
+        },
+        {
+          "name": "Atualizar Projeto",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/projetos/2", "host": ["{{baseUrl}}"], "path": ["api","projetos","2"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"App Mobile v2\",\n  \"descricao\": \"Versao revisada com novos requisitos\",\n  \"status\": \"EM_ANDAMENTO\",\n  \"dataInicio\": \"2025-08-01\",\n  \"dataPrazo\": \"2026-06-30\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Excluir Projeto",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/api/projetos/2", "host": ["{{baseUrl}}"], "path": ["api","projetos","2"] }
+          }
+        },
+        {
+          "name": "[RN-P5] Concluir Projeto com Tarefas Abertas (erro esperado 400)",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/projetos/1", "host": ["{{baseUrl}}"], "path": ["api","projetos","1"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Portal do Cliente\",\n  \"descricao\": \"Tentando concluir com tarefas abertas\",\n  \"status\": \"CONCLUIDO\",\n  \"dataInicio\": \"2025-06-01\",\n  \"dataPrazo\": \"2025-12-31\"\n}"
+            }
+          }
+        },
+        {
+          "name": "[RN-P2] Criar Projeto com Prazo Anterior ao Inicio (erro esperado 400)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/projetos", "host": ["{{baseUrl}}"], "path": ["api","projetos"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Projeto Invalido\",\n  \"status\": \"PLANEJAMENTO\",\n  \"dataInicio\": \"2025-12-01\",\n  \"dataPrazo\": \"2025-06-01\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Relatorio - Progresso Consolidado",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/projetos/relatorios/progresso", "host": ["{{baseUrl}}"], "path": ["api","projetos","relatorios","progresso"] }
+          }
+        },
+        {
+          "name": "Relatorio - Projetos em Risco",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/projetos/relatorios/em-risco", "host": ["{{baseUrl}}"], "path": ["api","projetos","relatorios","em-risco"] }
+          }
+        },
+        {
+          "name": "Relatorio - Distribuicao por Prioridade",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/projetos/1/relatorios/prioridades", "host": ["{{baseUrl}}"], "path": ["api","projetos","1","relatorios","prioridades"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Tarefas",
+      "item": [
+        {
+          "name": "Criar Tarefa",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/tarefas", "host": ["{{baseUrl}}"], "path": ["api","tarefas"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"Implementar notificacoes por email\",\n  \"descricao\": \"Envio de alertas de prazo via SMTP\",\n  \"prioridade\": \"MEDIUM\",\n  \"dataEntrega\": \"2025-10-30\",\n  \"horasEstimadas\": 12,\n  \"projetoId\": 1,\n  \"responsavelId\": 3\n}"
+            }
+          }
+        },
+        {
+          "name": "Listar Todas Tarefas",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/tarefas", "host": ["{{baseUrl}}"], "path": ["api","tarefas"] }
+          }
+        },
+        {
+          "name": "Buscar Tarefa por ID",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/tarefas/1", "host": ["{{baseUrl}}"], "path": ["api","tarefas","1"] }
+          }
+        },
+        {
+          "name": "Listar Tarefas por Projeto",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/tarefas/projeto/1", "host": ["{{baseUrl}}"], "path": ["api","tarefas","projeto","1"] }
+          }
+        },
+        {
+          "name": "Listar Tarefas por Responsavel",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/tarefas/responsavel/2", "host": ["{{baseUrl}}"], "path": ["api","tarefas","responsavel","2"] }
+          }
+        },
+        {
+          "name": "Atualizar Tarefa - Avancar Status",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/tarefas/3", "host": ["{{baseUrl}}"], "path": ["api","tarefas","3"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"IN_PROGRESS\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Atualizar Tarefa - Concluir e Registrar Horas",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/tarefas/3", "host": ["{{baseUrl}}"], "path": ["api","tarefas","3"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"DONE\",\n  \"horasTrabalhadas\": 10\n}"
+            }
+          }
+        },
+        {
+          "name": "Atualizar Tarefa - Atribuir Responsavel",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/tarefas/7", "host": ["{{baseUrl}}"], "path": ["api","tarefas","7"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"responsavelId\": 3\n}"
+            }
+          }
+        },
+        {
+          "name": "Excluir Tarefa",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/api/tarefas/7", "host": ["{{baseUrl}}"], "path": ["api","tarefas","7"] }
+          }
+        },
+        {
+          "name": "[RN-T3] Reverter Tarefa DONE para TODO (erro esperado 400)",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/tarefas/1", "host": ["{{baseUrl}}"], "path": ["api","tarefas","1"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"TODO\"\n}"
+            }
+          }
+        },
+        {
+          "name": "[RN-T4] Horas Trabalhadas Excessivas (erro esperado 400)",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/tarefas/2", "host": ["{{baseUrl}}"], "path": ["api","tarefas","2"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"horasTrabalhadas\": 999\n}"
+            }
+          }
+        },
+        {
+          "name": "[RN-T5] Criar Tarefa CRITICAL sem Responsavel (erro esperado 400)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/tarefas", "host": ["{{baseUrl}}"], "path": ["api","tarefas"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"Tarefa critica sem dono\",\n  \"prioridade\": \"CRITICAL\",\n  \"projetoId\": 1\n}"
+            }
+          }
+        },
+        {
+          "name": "Reatribuir Tarefas em Lote",
+          "request": {
+            "method": "PATCH",
+            "url": { "raw": "{{baseUrl}}/api/tarefas/reatribuir?origemId=2&destinoId=3", "host": ["{{baseUrl}}"], "path": ["api","tarefas","reatribuir"], "query": [{ "key": "origemId", "value": "2" },{ "key": "destinoId", "value": "3" }] }
+          }
+        },
+        {
+          "name": "[RN-T7] Reatribuir para o Mesmo Usuario (erro esperado 400)",
+          "request": {
+            "method": "PATCH",
+            "url": { "raw": "{{baseUrl}}/api/tarefas/reatribuir?origemId=1&destinoId=1", "host": ["{{baseUrl}}"], "path": ["api","tarefas","reatribuir"], "query": [{ "key": "origemId", "value": "1" },{ "key": "destinoId", "value": "1" }] }
+          }
+        },
+        {
+          "name": "Relatorio - Tarefas Atrasadas por Responsavel",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/tarefas/relatorios/atrasadas/2", "host": ["{{baseUrl}}"], "path": ["api","tarefas","relatorios","atrasadas","2"] }
+          }
+        },
+        {
+          "name": "Relatorio - Tarefas Criticas sem Responsavel",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/tarefas/relatorios/criticas-sem-responsavel", "host": ["{{baseUrl}}"], "path": ["api","tarefas","relatorios","criticas-sem-responsavel"] }
+          }
+        },
+        {
+          "name": "Relatorio - Desvio de Estimativa",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/tarefas/relatorios/desvio-estimativa?threshold=10", "host": ["{{baseUrl}}"], "path": ["api","tarefas","relatorios","desvio-estimativa"], "query": [{ "key": "threshold", "value": "10" }] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Comentarios",
+      "item": [
+        {
+          "name": "Criar Comentario",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/api/comentarios", "host": ["{{baseUrl}}"], "path": ["api","comentarios"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"conteudo\": \"Iniciando a implementacao conforme especificado.\",\n  \"tarefaId\": 2,\n  \"autorId\": 3\n}"
+            }
+          }
+        },
+        {
+          "name": "Listar Comentarios da Tarefa",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/comentarios/tarefa/1", "host": ["{{baseUrl}}"], "path": ["api","comentarios","tarefa","1"] }
+          }
+        },
+        {
+          "name": "Excluir Comentario (autor correto)",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/api/comentarios/1?solicitanteId=2", "host": ["{{baseUrl}}"], "path": ["api","comentarios","1"], "query": [{ "key": "solicitanteId", "value": "2" }] }
+          }
+        },
+        {
+          "name": "[RN-C3] Excluir Comentario de Outro Usuario (erro esperado 400)",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/api/comentarios/1?solicitanteId=99", "host": ["{{baseUrl}}"], "path": ["api","comentarios","1"], "query": [{ "key": "solicitanteId", "value": "99" }] }
+          }
+        },
+        {
+          "name": "Relatorio - Engajamento por Projeto",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/comentarios/relatorios/engajamento/1", "host": ["{{baseUrl}}"], "path": ["api","comentarios","relatorios","engajamento","1"] }
+          }
+        }
+      ]
+    }
+  ]
+}
