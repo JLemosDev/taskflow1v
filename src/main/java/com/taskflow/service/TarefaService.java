@@ -81,8 +81,11 @@ public class TarefaService {
     public TarefaResponseDTO criar(TarefaRequestDTO dto) {
         Projeto projeto = projetoService.buscarEntidadePorId(dto.projetoId());
 
-        // RN-T1
-        if (projeto.getStatus().equals("CONCLUIDO") || projeto.getStatus().equals("CANCELADO")) {
+        // RN-T1 — Comparação correta via ProjetoStatus enum.
+        // Projeto.status é persistido como String, portanto convertemos para o
+        // enum antes de comparar, garantindo segurança em tempo de compilação.
+        ProjetoStatus statusProjeto = ProjetoStatus.valueOf(projeto.getStatus());
+        if (statusProjeto == ProjetoStatus.CONCLUIDO || statusProjeto == ProjetoStatus.CANCELADO) {
             throw new RegraDeNegocioException(
                     "Não é possível adicionar tarefas a um projeto com status '"
                     + projeto.getStatus() + "'.");

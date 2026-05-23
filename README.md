@@ -445,6 +445,8 @@ classDiagram
 ```
 taskflow-api/
 ├── pom.xml
+├── postman/
+│   └── colecao_postman.json
 └── src/
     └── main/
         ├── java/com/taskflow/
@@ -494,6 +496,14 @@ taskflow-api/
         └── resources/
             └── application.properties
 ```
+
+---
+
+## 📅 Quadro Kanban
+
+O grupo utilizou o **Trello** para organizar e acompanhar as atividades do projeto ao longo do desenvolvimento, distribuindo as tarefas em colunas de _Backlog_, _Em Andamento_ e _Concluído_.
+
+> 🔗 **Link do quadro:** `[INSERIR LINK DO TRELLO OU GITHUB PROJECTS AQUI]`
 
 ---
 
