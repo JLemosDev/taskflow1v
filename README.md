@@ -11,6 +11,7 @@
 | [Alice Flávia Félix Lucena] |
 | [Jady Wéllyda de Albuquerque Silva] |
 | [João Vitor Lemos de Souza] |
+| [João Vitor Lemos de Souza] |
 | [Luis Henrique dos Anjos Silva] |
 | [Vívian Gabryelle Gomes Lucena Silva] |
 
@@ -522,7 +523,7 @@ taskflow-api/
 
 O grupo utilizou o **Trello** para organizar e acompanhar as atividades do projeto ao longo do desenvolvimento, distribuindo as tarefas em colunas de _Backlog_, _Em Andamento_ e _Concluído_.
 
-> 🔗 **Link do quadro:** `[INSERIR LINK DO TRELLO OU GITHUB PROJECTS AQUI]`
+> 🔗 **Link do quadro:** `[https://github.com/JLemosDev/taskflow1v]`
 
 ---
 
