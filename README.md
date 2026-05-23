@@ -6,11 +6,13 @@
 
 ## 👥 Integrantes do Grupo
 
-| Nome | Matrícula |
+| Nome |
 |------|-----------|
-| [Nome do Integrante 1] | [Matrícula] |
-| [Nome do Integrante 2] | [Matrícula] |
-| [Nome do Integrante 3] | [Matrícula] |
+| [Alice Flávia Félix Lucena] |
+| [Jady Wéllyda de Albuquerque Silva] |
+| [João Vitor Lemos de Souza] |
+| [Luis Henrique dos Anjos Silva] |
+| [Vívian Gabryelle Gomes Lucena Silva] |
 
 **Disciplina:** Programação II  
 **Instituição:** Centro Universitário FACOL  
