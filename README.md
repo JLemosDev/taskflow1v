@@ -6,14 +6,12 @@
 
 ## 👥 Integrantes do Grupo
 
-| Nome |
-|------|-----------|
-| [Alice Flávia Félix Lucena] |
-| [Jady Wéllyda de Albuquerque Silva] |
-| [João Vitor Lemos de Souza] |
-| [José Kayo Matheus Ferreira e Silva] |
-| [Luis Henrique dos Anjos Silva] |
-| [Vívian Gabryelle Gomes Lucena Silva] |
+- Alice Flávia Félix Lucena
+- Jady Wéllyda de Albuquerque Silva
+- João Vitor Lemos de Souza
+- José Kayo Matheus Ferreira e Silva
+- Luis Henrique dos Anjos Silva
+- Vívian Gabryelle Gomes Lucena Silva
 
 **Disciplina:** Programação II  
 **Instituição:** Centro Universitário FACOL  
@@ -523,7 +521,7 @@ taskflow-api/
 
 O grupo utilizou o **Trello** para organizar e acompanhar as atividades do projeto ao longo do desenvolvimento, distribuindo as tarefas em colunas de _Backlog_, _Em Andamento_ e _Concluído_.
 
-> 🔗 **Link do quadro:** `[https://github.com/JLemosDev/taskflow1v]`
+> 🔗 **Link do quadro:** `[INSERIR LINK DO TRELLO OU GITHUB PROJECTS AQUI]`
 
 ---
 
