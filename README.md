@@ -159,6 +159,25 @@ jdbc:h2:mem:taskflow_db
 
 ---
 
+
+## ⚙️ Variáveis de Ambiente
+
+O projeto utiliza **H2 em memória** por padrão — nenhuma instalação de banco de dados é necessária. Todas as configurações ficam em `src/main/resources/application.properties`.
+
+| Propriedade | Valor padrão | Descrição |
+|---|---|---|
+| `server.port` | `8080` | Porta em que a aplicação sobe |
+| `spring.datasource.url` | `jdbc:h2:mem:taskflow_db` | URL do banco H2 em memória |
+| `spring.datasource.username` | `sa` | Usuário do banco H2 |
+| `spring.datasource.password` | *(vazio)* | Senha do banco H2 |
+| `spring.jpa.hibernate.ddl-auto` | `create-drop` | Recria o schema a cada inicialização |
+| `spring.h2.console.enabled` | `true` | Habilita o console web do H2 |
+| `springdoc.swagger-ui.path` | `/swagger-ui.html` | Caminho da UI do Swagger |
+
+> 💡 Para trocar para **PostgreSQL ou MySQL** em produção, basta substituir as propriedades `spring.datasource.*` e `spring.jpa.database-platform` no `application.properties` — nenhuma alteração de código é necessária.
+
+---
+
 ## 📡 Mapa de Endpoints
 
 ```
@@ -446,7 +465,7 @@ classDiagram
 taskflow-api/
 ├── pom.xml
 ├── postman/
-│   └── colecao_postman.json
+│   └── TaskFlow_API.postman_collection.json
 └── src/
     └── main/
         ├── java/com/taskflow/
