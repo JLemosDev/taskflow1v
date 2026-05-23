@@ -11,7 +11,7 @@
 | [Alice Flávia Félix Lucena] |
 | [Jady Wéllyda de Albuquerque Silva] |
 | [João Vitor Lemos de Souza] |
-| [João Vitor Lemos de Souza] |
+| [José Kayo Matheus Ferreira e Silva] |
 | [Luis Henrique dos Anjos Silva] |
 | [Vívian Gabryelle Gomes Lucena Silva] |
 
