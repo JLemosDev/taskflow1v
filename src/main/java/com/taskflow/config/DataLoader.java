@@ -11,8 +11,10 @@ import org.springframework.context.annotation.Configuration;
 import java.time.LocalDate;
 
 /**
- * Popula o banco H2 com dados de exemplo ao iniciar a aplicação.
- * Facilita testes imediatos no Swagger e no H2 Console.
+ * Popula o banco com dados de exemplo ao iniciar a aplicação.
+ * Verifica se os dados já existem antes de inserir — compatível com
+ * H2 file mode (ddl-auto=update), evitando erros de chave duplicada
+ * em reinicializações.
  */
 @Configuration
 @RequiredArgsConstructor
@@ -27,7 +29,15 @@ public class DataLoader {
             ComentarioRepository comentarioRepo) {
 
         return args -> {
-            log.info(">>> Iniciando carga de dados de exemplo...");
+
+            // Se já existem dados, não faz nada
+            if (usuarioRepo.count() > 0) {
+                log.info(">>> Banco já populado ({} usuários encontrados). Pulando DataLoader.",
+                        usuarioRepo.count());
+                return;
+            }
+
+            log.info(">>> Banco vazio. Iniciando carga de dados de exemplo...");
 
             // ── Usuários ──────────────────────────────────────────────────────
             Usuario ana = usuarioRepo.save(Usuario.builder()
@@ -92,7 +102,7 @@ public class DataLoader {
                     .descricao("Adequar ao novo guia de marca")
                     .status(TaskStatus.TODO)
                     .prioridade(Priority.LOW)
-                    .dataEntrega(LocalDate.now().minusDays(3)) // tarefa atrasada
+                    .dataEntrega(LocalDate.now().minusDays(3))
                     .horasEstimadas(4)
                     .projeto(portal).responsavel(joao).build());
 
@@ -122,7 +132,7 @@ public class DataLoader {
                     .prioridade(Priority.MEDIUM)
                     .dataEntrega(LocalDate.now().plusDays(45))
                     .horasEstimadas(10)
-                    .projeto(mobile).build()); // sem responsável
+                    .projeto(mobile).build());
 
             // ── Comentários ───────────────────────────────────────────────────
             comentarioRepo.save(Comentario.builder()
@@ -145,7 +155,7 @@ public class DataLoader {
                     .conteudo("Vou usar GitHub Actions + Docker. Começo na sexta.")
                     .tarefa(t3).autor(ana).build());
 
-            log.info(">>> Dados de exemplo carregados: {} usuários, {} projetos, {} tarefas, {} comentários.",
+            log.info(">>> Dados carregados com sucesso: {} usuários, {} projetos, {} tarefas, {} comentários.",
                     usuarioRepo.count(), projetoRepo.count(),
                     tarefaRepo.count(), comentarioRepo.count());
         };

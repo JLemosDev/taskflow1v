@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>TaskFlow</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:   #0D1B2A;
+  --blue:   #1B4F72;
+  --teal:   #0ABFBC;
+  --teal2:  #07A3A0;
+  --white:  #FFFFFF;
+  --bg:     #F0F4F8;
+  --card:   #FFFFFF;
+  --border: #DDE3EC;
+  --gray:   #5C6F82;
+  --lgray:  #9AABB8;
+  --green:  #12B76A;
+  --red:    #F04438;
+  --yellow: #F79009;
+  --purple: #7C3AED;
+  --text:   #0D1B2A;
+  --sidebar-w: 240px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+/* ═══ LOGIN ════════════════════════════════════════════════════════════ */
+#screen-login {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  background: var(--navy);
+  background-image:
+    radial-gradient(ellipse at 20% 50%, rgba(10,191,188,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(27,79,114,0.3) 0%, transparent 55%);
+}
+.login-box {
+  width: 420px; background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px; padding: 48px 40px;
+  backdrop-filter: blur(12px);
+  animation: fadeUp 0.5s ease;
+}
+@keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+.login-logo { text-align: center; margin-bottom: 36px; }
+.login-logo h1 { font-family:'Syne',sans-serif; font-size:36px; font-weight:800; color:var(--white); letter-spacing:-1px; }
+.login-logo h1 span { color: var(--teal); }
+.login-logo p { color: var(--lgray); font-size: 13px; margin-top: 6px; }
+.login-label { font-size: 12px; font-weight: 600; color: var(--lgray); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; display: block; }
+.login-cards { display: flex; flex-direction: column; gap: 12px; margin-bottom: 28px; }
+.profile-card {
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px 18px; border-radius: 12px;
+  border: 2px solid rgba(255,255,255,0.08);
+  cursor: pointer; transition: all 0.2s; background: rgba(255,255,255,0.03);
+}
+.profile-card:hover { border-color: var(--teal); background: rgba(10,191,188,0.08); transform: translateX(4px); }
+.profile-card.selected { border-color: var(--teal); background: rgba(10,191,188,0.12); }
+.profile-icon { width: 44px; height: 44px; border-radius: 10px; display:flex; align-items:center; justify-content:center; font-size:20px; }
+.profile-icon.admin { background: rgba(10,191,188,0.2); }
+.profile-icon.user  { background: rgba(124,58,237,0.2); }
+.profile-info h3 { font-family:'Syne',sans-serif; font-size:15px; font-weight:700; color:var(--white); }
+.profile-info p  { font-size:12px; color:var(--lgray); margin-top:2px; }
+.login-select-label { font-size:12px; font-weight:600; color:var(--lgray); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:8px; display:block; }
+.login-select {
+  width:100%; padding:11px 14px; border-radius:10px;
+  border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.06);
+  color: var(--white); font-size: 14px; font-family: 'DM Sans', sans-serif;
+  outline:none; margin-bottom:20px;
+}
+.login-select option { background: #1a2a3a; color: var(--white); }
+.btn-login {
+  width:100%; padding:14px; border-radius:12px; border:none;
+  background: var(--teal); color: var(--navy); font-size:15px; font-weight:700;
+  font-family:'Syne',sans-serif; cursor:pointer; transition:all 0.2s;
+  letter-spacing:0.02em;
+}
+.btn-login:hover { background: var(--teal2); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(10,191,188,0.3); }
+.btn-login:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
+
+/* ═══ APP ════════════════════════════════════════════════════════════════ */
+#screen-app { display:none; min-height:100vh; }
+
+/* SIDEBAR */
+.sidebar {
+  position:fixed; top:0; left:0; width:var(--sidebar-w); height:100vh;
+  background: var(--navy); display:flex; flex-direction:column; z-index:100;
+  border-right: 1px solid rgba(255,255,255,0.06);
+}
+.sb-logo {
+  padding: 24px 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.sb-logo h1 { font-family:'Syne',sans-serif; font-size:22px; font-weight:800; color:var(--white); }
+.sb-logo h1 span { color:var(--teal); }
+.sb-user {
+  display:flex; align-items:center; gap:10px; margin-top:12px;
+  padding:10px 12px; border-radius:10px; background:rgba(255,255,255,0.05);
+}
+.sb-user-av { width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:14px; }
+.sb-user-av.admin-av { background: rgba(10,191,188,0.25); }
+.sb-user-av.user-av  { background: rgba(124,58,237,0.25); }
+.sb-user-name { font-size:13px; font-weight:600; color:var(--white); }
+.sb-user-role { font-size:11px; color:var(--lgray); }
+.sb-nav { flex:1; padding:16px 10px; overflow-y:auto; }
+.sb-section { font-size:10px; font-weight:700; color:rgba(255,255,255,0.25); letter-spacing:0.12em; text-transform:uppercase; padding:0 10px 6px; margin-top:12px; }
+.nav-item {
+  display:flex; align-items:center; gap:10px; padding:9px 10px;
+  border-radius:8px; cursor:pointer; color:rgba(255,255,255,0.55);
+  font-size:13.5px; font-weight:500; transition:all 0.15s; margin-bottom:2px;
+}
+.nav-item:hover { background:rgba(255,255,255,0.07); color:var(--white); }
+.nav-item.active { background:rgba(10,191,188,0.15); color:var(--teal); font-weight:600; }
+.nav-item .ni { font-size:15px; width:20px; text-align:center; }
+.sb-logout {
+  padding:14px 16px; border-top:1px solid rgba(255,255,255,0.07);
+  cursor:pointer; color:rgba(255,255,255,0.4); font-size:13px;
+  display:flex; align-items:center; gap:8px; transition:color 0.15s;
+}
+.sb-logout:hover { color:var(--red); }
+
+/* MAIN */
+.main { margin-left:var(--sidebar-w); padding:28px 32px; }
+.page { display:none; animation: fadeUp 0.3s ease; }
+.page.active { display:block; }
+
+/* TOPBAR */
+.topbar { display:flex; align-items:center; justify-content:space-between; margin-bottom:24px; }
+.topbar-left h2 { font-family:'Syne',sans-serif; font-size:24px; font-weight:800; color:var(--navy); }
+.topbar-left p  { font-size:13px; color:var(--lgray); margin-top:2px; }
+
+/* BUTTONS */
+.btn { padding:9px 18px; border-radius:8px; border:none; cursor:pointer; font-size:13px; font-weight:600; font-family:'DM Sans',sans-serif; transition:all 0.15s; display:inline-flex; align-items:center; gap:6px; }
+.btn-primary { background:var(--teal); color:var(--navy); }
+.btn-primary:hover { background:var(--teal2); box-shadow:0 4px 14px rgba(10,191,188,0.3); }
+.btn-danger  { background:var(--red);  color:var(--white); }
+.btn-danger:hover  { background:#c0392b; }
+.btn-ghost   { background:transparent; color:var(--gray); border:1px solid var(--border); }
+.btn-ghost:hover   { background:var(--bg); }
+.btn-sm { padding:5px 12px; font-size:12px; }
+
+/* STATS */
+.stats { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:24px; }
+.stat-card { background:var(--card); border-radius:12px; padding:20px; border:1px solid var(--border); display:flex; align-items:center; gap:16px; }
+.stat-ic { width:48px; height:48px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; }
+.ic-teal   { background:#E6FAFA; }
+.ic-blue   { background:#EBF3FB; }
+.ic-green  { background:#ECFDF5; }
+.ic-yellow { background:#FFFBEB; }
+.ic-purple { background:#F5F3FF; }
+.stat-num   { font-family:'Syne',sans-serif; font-size:30px; font-weight:800; color:var(--navy); line-height:1; }
+.stat-label { font-size:12px; color:var(--lgray); margin-top:4px; }
+
+/* CARDS */
+.card { background:var(--card); border-radius:12px; border:1px solid var(--border); overflow:hidden; margin-bottom:20px; }
+.card-header { padding:16px 20px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+.card-header h3 { font-family:'Syne',sans-serif; font-size:15px; font-weight:700; color:var(--navy); }
+
+/* TABLE */
+table { width:100%; border-collapse:collapse; }
+th { padding:10px 18px; text-align:left; font-size:11px; font-weight:700; color:var(--lgray); text-transform:uppercase; letter-spacing:0.07em; background:#F8FAFB; border-bottom:1px solid var(--border); }
+td { padding:13px 18px; font-size:13px; border-bottom:1px solid var(--border); vertical-align:middle; }
+tr:last-child td { border-bottom:none; }
+tr:hover td { background:#FAFBFC; }
+.actions { display:flex; gap:6px; }
+
+/* BADGES */
+.badge { display:inline-flex; align-items:center; padding:3px 10px; border-radius:20px; font-size:11px; font-weight:700; letter-spacing:0.03em; }
+.b-todo        { background:#F1F5F9; color:#475569; }
+.b-inprogress  { background:#EFF6FF; color:#1D4ED8; }
+.b-done        { background:#ECFDF5; color:#15803D; }
+.b-cancelled   { background:#FEF2F2; color:#DC2626; }
+.b-plan        { background:#F5F3FF; color:#6D28D9; }
+.b-andamento   { background:#EFF6FF; color:#1D4ED8; }
+.b-concluido   { background:#ECFDF5; color:#15803D; }
+.b-cancelado   { background:#FEF2F2; color:#DC2626; }
+.b-low         { background:#ECFDF5; color:#15803D; }
+.b-medium      { background:#FFFBEB; color:#B45309; }
+.b-high        { background:#FFF7ED; color:#C2410C; }
+.b-critical    { background:#FEF2F2; color:#B91C1C; }
+.b-admin       { background:#F5F3FF; color:#6D28D9; }
+.b-gerente     { background:#EFF6FF; color:#1D4ED8; }
+.b-membro      { background:#ECFDF5; color:#15803D; }
+
+/* MODAL */
+.overlay { display:none; position:fixed; inset:0; background:rgba(13,27,42,0.6); z-index:300; align-items:center; justify-content:center; backdrop-filter:blur(2px); }
+.overlay.open { display:flex; }
+.modal { background:var(--white); border-radius:16px; padding:32px; width:500px; max-width:95vw; max-height:90vh; overflow-y:auto; box-shadow:0 24px 80px rgba(0,0,0,0.2); animation:fadeUp 0.25s ease; }
+.modal-title { font-family:'Syne',sans-serif; font-size:18px; font-weight:800; color:var(--navy); margin-bottom:22px; display:flex; align-items:center; gap:8px; }
+.form-group { margin-bottom:16px; }
+.form-group label { display:block; font-size:11px; font-weight:700; color:var(--gray); text-transform:uppercase; letter-spacing:0.07em; margin-bottom:6px; }
+.form-group input, .form-group select, .form-group textarea {
+  width:100%; padding:10px 13px; border:1.5px solid var(--border); border-radius:8px;
+  font-size:13.5px; font-family:'DM Sans',sans-serif; color:var(--text); background:#FAFBFC; transition:border-color 0.15s;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline:none; border-color:var(--teal); background:var(--white); }
+.form-group textarea { resize:vertical; min-height:85px; }
+.form-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.modal-footer { display:flex; justify-content:flex-end; gap:10px; margin-top:22px; padding-top:18px; border-top:1px solid var(--border); }
+
+/* TOAST */
+#toast { position:fixed; bottom:24px; right:24px; z-index:999; background:var(--navy); color:var(--white); padding:13px 20px; border-radius:10px; font-size:13px; font-weight:500; opacity:0; transform:translateY(8px); transition:all 0.3s; pointer-events:none; max-width:340px; font-family:'DM Sans',sans-serif; }
+#toast.show { opacity:1; transform:translateY(0); }
+#toast.ok  { border-left:4px solid var(--green); }
+#toast.err { border-left:4px solid var(--red); }
+
+/* MY TASKS (user view) */
+.task-col-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:20px; }
+.task-col { background:var(--card); border-radius:12px; border:1px solid var(--border); overflow:hidden; }
+.task-col-header { padding:12px 16px; font-family:'Syne',sans-serif; font-size:13px; font-weight:700; display:flex; align-items:center; gap:8px; }
+.col-todo       .task-col-header { background:#F1F5F9; color:#475569; }
+.col-inprogress .task-col-header { background:#EFF6FF; color:#1D4ED8; }
+.col-done       .task-col-header { background:#ECFDF5; color:#15803D; }
+.task-item { padding:12px 16px; border-top:1px solid var(--border); cursor:pointer; transition:background 0.1s; }
+.task-item:hover { background:#F8FAFC; }
+.task-item-title { font-size:13px; font-weight:600; color:var(--navy); margin-bottom:4px; }
+.task-item-meta  { font-size:11px; color:var(--lgray); display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+
+/* EMPTY */
+.empty { text-align:center; padding:48px 20px; color:var(--lgray); }
+.empty-icon { font-size:36px; margin-bottom:10px; }
+
+/* SEARCH */
+.toolbar { display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap; }
+.toolbar input, .toolbar select { padding:9px 13px; border:1.5px solid var(--border); border-radius:8px; font-size:13px; font-family:'DM Sans',sans-serif; background:var(--white); }
+.toolbar input:focus, .toolbar select:focus { outline:none; border-color:var(--teal); }
+.toolbar input { flex:1; min-width:200px; }
+
+/* DASHBOARD ALERTS */
+.alert-row { display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid var(--border); }
+.alert-row:last-child { border-bottom:none; }
+.alert-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+.dot-red  { background:var(--red); }
+.dot-yellow { background:var(--yellow); }
+.dot-green  { background:var(--green); }
+
+/* RELATORIO TABLE */
+.rel-table th { font-size:11px; }
+.rel-table td { font-size:12px; }
+
+/* GRID 2 */
+.grid2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+</style>
+</head>
+<body>
+
+<!-- ═══ LOGIN ════════════════════════════════════════════════════════════ -->
+<div id="screen-login">
+  <div class="login-box">
+    <div class="login-logo">
+      <h1>Task<span>Flow</span></h1>
+      <p>Sistema de Gerenciamento de Projetos e Tarefas</p>
+    </div>
+
+    <span class="login-label">Escolha seu perfil</span>
+    <div class="login-cards">
+      <div class="profile-card" id="card-admin" onclick="selectPerfil('admin')">
+        <div class="profile-icon admin">🛡️</div>
+        <div class="profile-info">
+          <h3>Administrador / Gerente</h3>
+          <p>Acesso total — projetos, equipe e relatórios</p>
+        </div>
+      </div>
+      <div class="profile-card" id="card-usuario" onclick="selectPerfil('usuario')">
+        <div class="profile-icon user">👤</div>
+        <div class="profile-info">
+          <h3>Colaborador</h3>
+          <p>Minhas tarefas, projetos e comentários</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="login-usuario-block" style="display:none">
+      <span class="login-select-label">Selecione seu usuário</span>
+      <select class="login-select" id="login-select-usuario">
+        <option value="">Carregando usuários...</option>
+      </select>
+    </div>
+
+    <button class="btn-login" id="btn-entrar" onclick="entrar()" disabled>Entrar</button>
+  </div>
+</div>
+
+<!-- ═══ APP ════════════════════════════════════════════════════════════════ -->
+<div id="screen-app">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sb-logo">
+      <h1>Task<span>Flow</span></h1>
+      <div class="sb-user">
+        <div class="sb-user-av" id="sb-av">🛡️</div>
+        <div>
+          <div class="sb-user-name" id="sb-nome">—</div>
+          <div class="sb-user-role" id="sb-role">—</div>
+        </div>
+      </div>
+    </div>
+    <nav class="sb-nav" id="sb-nav"></nav>
+    <div class="sb-logout" onclick="logout()">⬅️ Sair</div>
+  </div>
+
+  <!-- PAGES -->
+  <div class="main" id="main-content"></div>
+</div>
+
+<!-- MODAIS -->
+<div class="overlay" id="m-usuario"><div class="modal">
+  <div class="modal-title">👤 <span id="m-usuario-titulo">Novo Usuário</span></div>
+  <input type="hidden" id="u-id">
+  <div class="form-group"><label>Nome *</label><input id="u-nome" placeholder="Ex: João Silva"></div>
+  <div class="form-group"><label>E-mail *</label><input type="email" id="u-email" placeholder="joao@email.com"></div>
+  <div class="form-group"><label>Role *</label><select id="u-role"><option value="">Selecione...</option><option>MEMBRO</option><option>GERENTE</option><option>ADMIN</option></select></div>
+  <div class="modal-footer">
+    <button class="btn btn-ghost" onclick="closeM('m-usuario')">Cancelar</button>
+    <button class="btn btn-primary" onclick="salvarUsuario()">Salvar</button>
+  </div>
+</div></div>
+
+<div class="overlay" id="m-projeto"><div class="modal">
+  <div class="modal-title">📁 <span id="m-projeto-titulo">Novo Projeto</span></div>
+  <input type="hidden" id="p-id">
+  <div class="form-group"><label>Nome *</label><input id="p-nome" placeholder="Ex: Portal do Cliente"></div>
+  <div class="form-group"><label>Descrição</label><textarea id="p-desc"></textarea></div>
+  <div class="form-group"><label>Status *</label><select id="p-status"><option value="">Selecione...</option><option>PLANEJAMENTO</option><option>EM_ANDAMENTO</option><option>CONCLUIDO</option><option>CANCELADO</option></select></div>
+  <div class="form-row">
+    <div class="form-group"><label>Data de Início</label><input type="date" id="p-inicio"></div>
+    <div class="form-group"><label>Prazo</label><input type="date" id="p-prazo"></div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-ghost" onclick="closeM('m-projeto')">Cancelar</button>
+    <button class="btn btn-primary" onclick="salvarProjeto()">Salvar</button>
+  </div>
+</div></div>
+
+<div class="overlay" id="m-tarefa"><div class="modal">
+  <div class="modal-title">✅ <span id="m-tarefa-titulo">Nova Tarefa</span></div>
+  <input type="hidden" id="t-id">
+  <div class="form-group"><label>Título *</label><input id="t-titulo" placeholder="Ex: Implementar autenticação"></div>
+  <div class="form-group"><label>Descrição</label><textarea id="t-desc"></textarea></div>
+  <div class="form-row">
+    <div class="form-group"><label>Status</label><select id="t-status"><option value="">Padrão (TODO)</option><option>TODO</option><option>IN_PROGRESS</option><option>DONE</option><option>CANCELLED</option></select></div>
+    <div class="form-group"><label>Prioridade</label><select id="t-prio"><option value="">Padrão (MEDIUM)</option><option>LOW</option><option>MEDIUM</option><option>HIGH</option><option>CRITICAL</option></select></div>
+  </div>
+  <div class="form-row">
+    <div class="form-group"><label>Projeto *</label><select id="t-proj"><option value="">Selecione...</option></select></div>
+    <div class="form-group"><label>Responsável</label><select id="t-resp"><option value="">Nenhum</option></select></div>
+  </div>
+  <div class="form-row">
+    <div class="form-group"><label>Data de Entrega</label><input type="date" id="t-entrega"></div>
+    <div class="form-group"><label>Horas Estimadas</label><input type="number" id="t-horas" min="1" max="999" placeholder="Ex: 8"></div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-ghost" onclick="closeM('m-tarefa')">Cancelar</button>
+    <button class="btn btn-primary" onclick="salvarTarefa()">Salvar</button>
+  </div>
+</div></div>
+
+<div class="overlay" id="m-comentario"><div class="modal">
+  <div class="modal-title">💬 Novo Comentário</div>
+  <input type="hidden" id="c-tarefa-id">
+  <div class="form-group"><label>Tarefa</label><input id="c-tarefa-nome" disabled style="background:#f0f0f0"></div>
+  <div class="form-group"><label>Comentário *</label><textarea id="c-conteudo" placeholder="Digite seu comentário..." style="min-height:110px"></textarea></div>
+  <div class="modal-footer">
+    <button class="btn btn-ghost" onclick="closeM('m-comentario')">Cancelar</button>
+    <button class="btn btn-primary" onclick="salvarComentario()">Publicar</button>
+  </div>
+</div></div>
+
+<div class="overlay" id="m-status"><div class="modal">
+  <div class="modal-title">🔄 Atualizar Status</div>
+  <input type="hidden" id="ms-id">
+  <p style="font-size:13px;color:var(--gray);margin-bottom:16px" id="ms-titulo-label"></p>
+  <div class="form-group"><label>Novo Status</label>
+    <select id="ms-status">
+      <option value="TODO">TODO</option>
+      <option value="IN_PROGRESS">IN_PROGRESS</option>
+      <option value="DONE">DONE</option>
+      <option value="CANCELLED">CANCELLED</option>
+    </select>
+  </div>
+  <div class="form-group"><label>Horas Trabalhadas (opcional)</label><input type="number" id="ms-horas" min="0" placeholder="Ex: 5"></div>
+  <div class="modal-footer">
+    <button class="btn btn-ghost" onclick="closeM('m-status')">Cancelar</button>
+    <button class="btn btn-primary" onclick="atualizarStatus()">Atualizar</button>
+  </div>
+</div></div>
+
+<div id="toast"></div>
+
+<script>
+const API = 'http://localhost:8080';
+let PERFIL = null; // 'admin' | 'usuario'
+let ME = null;     // objeto usuário logado (para colaborador)
+let cachedUsuarios = [];
+let cachedProjetos = [];
+let cachedTarefas  = [];
+
+// ─── HELPERS ─────────────────────────────────────────────────────────────────
+async function http(method, path, body) {
+  const opts = { method, headers: { 'Content-Type': 'application/json' } };
+  if (body) opts.body = JSON.stringify(body);
+  const r = await fetch(API + path, opts);
+  if (!r.ok) { const e = await r.json().catch(() => ({})); throw new Error(e.message || e.error || `Erro ${r.status}`); }
+  if (r.status === 204) return null;
+  return r.json();
+}
+
+function toast(msg, tipo = 'ok') {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.className = 'show ' + tipo;
+  setTimeout(() => el.className = '', 3000);
+}
+
+function openM(id) { document.getElementById(id).classList.add('open'); }
+function closeM(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.overlay').forEach(o => o.addEventListener('click', e => { if (e.target===o) o.classList.remove('open'); }));
+
+function badgeSt(s) {
+  const m = { TODO:'todo', IN_PROGRESS:'inprogress', DONE:'done', CANCELLED:'cancelled', PLANEJAMENTO:'plan', EM_ANDAMENTO:'andamento', CONCLUIDO:'concluido', CANCELADO:'cancelado' };
+  const l = { IN_PROGRESS:'IN PROGRESS' };
+  return `<span class="badge b-${m[s]||'todo'}">${l[s]||s||'—'}</span>`;
+}
+function badgePr(p) {
+  const m = { LOW:'low', MEDIUM:'medium', HIGH:'high', CRITICAL:'critical' };
+  return `<span class="badge b-${m[p]||'medium'}">${p||'MEDIUM'}</span>`;
+}
+function badgeRole(r) {
+  const m = { ADMIN:'admin', GERENTE:'gerente', MEMBRO:'membro' };
+  return `<span class="badge b-${m[r]||'membro'}">${r}</span>`;
+}
+
+// ─── LOGIN ────────────────────────────────────────────────────────────────────
+let perfilSel = null;
+async function selectPerfil(p) {
+  perfilSel = p;
+  document.getElementById('card-admin').classList.toggle('selected', p==='admin');
+  document.getElementById('card-usuario').classList.toggle('selected', p==='usuario');
+  const ub = document.getElementById('login-usuario-block');
+  const btn = document.getElementById('btn-entrar');
+  if (p === 'usuario') {
+    ub.style.display = 'block';
+    btn.disabled = true;
+    try {
+      const data = await http('GET', '/api/usuarios');
+      cachedUsuarios = data;
+      const sel = document.getElementById('login-select-usuario');
+      sel.innerHTML = '<option value="">Selecione seu usuário...</option>' +
+        data.map(u => `<option value="${u.id}">${u.nome} (${u.role})</option>`).join('');
+      sel.onchange = () => { btn.disabled = !sel.value; };
+    } catch(e) { toast('Erro ao carregar usuários', 'err'); }
+  } else {
+    ub.style.display = 'none';
+    btn.disabled = false;
+  }
+}
+
+async function entrar() {
+  PERFIL = perfilSel;
+  if (PERFIL === 'usuario') {
+    const sel = document.getElementById('login-select-usuario');
+    ME = cachedUsuarios.find(u => u.id == sel.value);
+    if (!ME) { toast('Selecione um usuário', 'err'); return; }
+  }
+  document.getElementById('screen-login').style.display = 'none';
+  document.getElementById('screen-app').style.display = 'block';
+  setupApp();
+}
+
+function logout() {
+  PERFIL = null; ME = null; perfilSel = null;
+  document.getElementById('screen-login').style.display = 'flex';
+  document.getElementById('screen-app').style.display = 'none';
+  document.getElementById('card-admin').classList.remove('selected');
+  document.getElementById('card-usuario').classList.remove('selected');
+  document.getElementById('login-usuario-block').style.display = 'none';
+  document.getElementById('btn-entrar').disabled = true;
+  document.getElementById('login-select-usuario').innerHTML = '';
+}
+
+// ─── SETUP APP ────────────────────────────────────────────────────────────────
+function setupApp() {
+  const av   = document.getElementById('sb-av');
+  const nome = document.getElementById('sb-nome');
+  const role = document.getElementById('sb-role');
+
+  if (PERFIL === 'admin') {
+    av.textContent = '🛡️'; av.className = 'sb-user-av admin-av';
+    nome.textContent = 'Administrador';
+    role.textContent = 'Acesso total';
+    renderNavAdmin();
+    renderMainAdmin();
+    goPage('dash');
+  } else {
+    av.textContent = '👤'; av.className = 'sb-user-av user-av';
+    nome.textContent = ME.nome;
+    role.textContent = ME.role;
+    renderNavUsuario();
+    renderMainUsuario();
+    goPage('minhas-tarefas');
+  }
+}
+
+// ─── NAV ──────────────────────────────────────────────────────────────────────
+function renderNavAdmin() {
+  document.getElementById('sb-nav').innerHTML = `
+    <div class="sb-section">Visão Geral</div>
+    <div class="nav-item active" onclick="goPage('dash')" data-page="dash"><span class="ni">🏠</span> Dashboard</div>
+    <div class="sb-section">Gestão</div>
+    <div class="nav-item" onclick="goPage('usuarios')" data-page="usuarios"><span class="ni">👥</span> Usuários</div>
+    <div class="nav-item" onclick="goPage('projetos')" data-page="projetos"><span class="ni">📁</span> Projetos</div>
+    <div class="nav-item" onclick="goPage('tarefas')" data-page="tarefas"><span class="ni">✅</span> Tarefas</div>
+    <div class="nav-item" onclick="goPage('comentarios-admin')" data-page="comentarios-admin"><span class="ni">💬</span> Comentários</div>
+    <div class="sb-section">Análise</div>
+    <div class="nav-item" onclick="goPage('relatorios')" data-page="relatorios"><span class="ni">📊</span> Relatórios</div>`;
+}
+
+function renderNavUsuario() {
+  document.getElementById('sb-nav').innerHTML = `
+    <div class="sb-section">Meu Espaço</div>
+    <div class="nav-item active" onclick="goPage('minhas-tarefas')" data-page="minhas-tarefas"><span class="ni">✅</span> Minhas Tarefas</div>
+    <div class="nav-item" onclick="goPage('meus-projetos')" data-page="meus-projetos"><span class="ni">📁</span> Meus Projetos</div>
+    <div class="nav-item" onclick="goPage('meus-comentarios')" data-page="meus-comentarios"><span class="ni">💬</span> Comentários</div>`;
+}
+
+function goPage(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const el = document.getElementById('page-' + page);
+  if (el) el.classList.add('active');
+  document.querySelectorAll(`[data-page="${page}"]`).forEach(n => n.classList.add('active'));
+  const loaders = {
+    dash: loadDash, usuarios: loadUsuarios, projetos: loadProjetos,
+    tarefas: loadTarefas, 'comentarios-admin': loadComentariosAdmin,
+    relatorios: () => loadRelatorio('criticas'),
+    'minhas-tarefas': loadMinhasTarefas, 'meus-projetos': loadMeusProjetos,
+    'meus-comentarios': loadMeusComentarios,
+  };
+  if (loaders[page]) loaders[page]();
+}
+
+// ─── RENDER MAIN ADMIN ────────────────────────────────────────────────────────
+function renderMainAdmin() {
+  document.getElementById('main-content').innerHTML = `
+  <!-- DASHBOARD -->
+  <div id="page-dash" class="page">
+    <div class="topbar"><div class="topbar-left"><h2>Dashboard</h2><p>Visão geral do TaskFlow</p></div>
+      <button class="btn btn-primary" onclick="loadDash()">🔄 Atualizar</button></div>
+    <div class="stats">
+      <div class="stat-card"><div class="stat-ic ic-teal">👥</div><div><div class="stat-num" id="ds-u">—</div><div class="stat-label">Usuários</div></div></div>
+      <div class="stat-card"><div class="stat-ic ic-blue">📁</div><div><div class="stat-num" id="ds-p">—</div><div class="stat-label">Projetos</div></div></div>
+      <div class="stat-card"><div class="stat-ic ic-green">✅</div><div><div class="stat-num" id="ds-t">—</div><div class="stat-label">Tarefas</div></div></div>
+      <div class="stat-card"><div class="stat-ic ic-yellow">🔴</div><div><div class="stat-num" id="ds-c">—</div><div class="stat-label">Críticas s/ resp.</div></div></div>
+    </div>
+    <div class="grid2">
+      <div class="card"><div class="card-header"><h3>⚠️ Tarefas Críticas sem Responsável</h3></div><div id="ds-criticas" style="padding:16px"></div></div>
+      <div class="card"><div class="card-header"><h3>👥 Ranking da Equipe</h3></div><div id="ds-ranking" style="padding:16px"></div></div>
+    </div>
+  </div>
+
+  <!-- USUÁRIOS -->
+  <div id="page-usuarios" class="page">
+    <div class="topbar"><div class="topbar-left"><h2>Usuários</h2><p>Gerencie os membros da equipe</p></div>
+      <button class="btn btn-primary" onclick="abrirNovoUsuario()">+ Novo Usuário</button></div>
+    <div class="toolbar"><input id="s-usuario" placeholder="🔍  Buscar usuário..." oninput="filterT('tb-usuarios',this.value)"></div>
+    <div class="card"><table>
+      <thead><tr><th>ID</th><th>Nome</th><th>E-mail</th><th>Role</th><th>Ações</th></tr></thead>
+      <tbody id="tb-usuarios"></tbody>
+    </table></div>
+  </div>
+
+  <!-- PROJETOS -->
+  <div id="page-projetos" class="page">
+    <div class="topbar"><div class="topbar-left"><h2>Projetos</h2><p>Todos os projetos cadastrados</p></div>
+      <button class="btn btn-primary" onclick="abrirNovoProjeto()">+ Novo Projeto</button></div>
+    <div class="toolbar"><input id="s-projeto" placeholder="🔍  Buscar projeto..." oninput="filterT('tb-projetos',this.value)"></div>
+    <div class="card"><table>
+      <thead><tr><th>ID</th><th>Nome</th><th>Status</th><th>Início</th><th>Prazo</th><th>Ações</th></tr></thead>
+      <tbody id="tb-projetos"></tbody>
+    </table></div>
+  </div>
+
+  <!-- TAREFAS -->
+  <div id="page-tarefas" class="page">
+    <div class="topbar"><div class="topbar-left"><h2>Tarefas</h2><p>Todas as tarefas do sistema</p></div>
+      <button class="btn btn-primary" onclick="abrirNovaTarefa()">+ Nova Tarefa</button></div>
+    <div class="toolbar">
+      <input id="s-tarefa" placeholder="🔍  Buscar tarefa..." oninput="filterT('tb-tarefas',this.value)">
+      <select onchange="filtrarStTarefa(this.value)" style="padding:9px 13px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:white">
+        <option value="">Todos os status</option><option>TODO</option><option>IN_PROGRESS</option><option>DONE</option><option>CANCELLED</option>
+      </select>
+    </div>
+    <div class="card"><table>
+      <thead><tr><th>ID</th><th>Título</th><th>Status</th><th>Prioridade</th><th>Projeto</th><th>Responsável</th><th>Entrega</th><th>Ações</th></tr></thead>
+      <tbody id="tb-tarefas"></tbody>
+    </table></div>
+  </div>
+
+  <!-- COMENTÁRIOS ADMIN -->
+  <div id="page-comentarios-admin" class="page">
+    <div class="topbar"><div class="topbar-left"><h2>Comentários</h2><p>Busque comentários por tarefa</p></div></div>
+    <div class="card">
+      <div class="card-header"><h3>Buscar por tarefa</h3>
+        <div style="display:flex;gap:10px;align-items:center">
+          <input type="number" id="ca-tarefa-id" placeholder="ID da tarefa" style="padding:7px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;width:140px">
+          <button class="btn btn-primary btn-sm" onclick="loadComentariosAdmin()">Buscar</button>
+        </div>
+      </div>
+      <table><thead><tr><th>ID</th><th>Conteúdo</th><th>Autor</th><th>Data</th><th>Ações</th></tr></thead>
+        <tbody id="tb-comentarios-admin"></tbody></table>
+    </div>
+  </div>
+
+  <!-- RELATÓRIOS -->
+  <div id="page-relatorios" class="page">
+    <div class="topbar"><div class="topbar-left"><h2>Relatórios</h2><p>Análises em tempo real</p></div></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px">
+      <button class="btn btn-primary btn-sm" onclick="loadRelatorio('criticas')">🔴 Críticas s/ resp.</button>
+      <button class="btn btn-ghost btn-sm"   onclick="loadRelatorio('ranking')">👥 Ranking equipe</button>
+      <button class="btn btn-ghost btn-sm"   onclick="loadRelatorio('progresso')">📈 Progresso</button>
+      <button class="btn btn-ghost btn-sm"   onclick="loadRelatorio('risco')">⚠️ Em risco</button>
+      <button class="btn btn-ghost btn-sm"   onclick="loadRelatorio('sobrecarregados')">😓 Sobrecarregados</button>
+    </div>
+    <div id="rel-resultado" class="card"></div>
+  </div>`;
+}
+
+// ─── RENDER MAIN USUARIO ──────────────────────────────────────────────────────
+function renderMainUsuario() {
+  document.getElementById('main-content').innerHTML = `
+  <!-- MINHAS TAREFAS -->
+  <div id="page-minhas-tarefas" class="page">
+    <div class="topbar"><div class="topbar-left"><h2>Minhas Tarefas</h2><p>Tarefas atribuídas a você</p></div>
+      <button class="btn btn-primary" onclick="loadMinhasTarefas()">🔄 Atualizar</button></div>
+    <div class="task-col-grid">
+      <div class="task-col col-todo"><div class="task-col-header">📋 A Fazer <span id="cnt-todo" style="margin-left:auto;background:rgba(0,0,0,0.1);border-radius:20px;padding:1px 8px;font-size:11px"></span></div><div id="col-todo"></div></div>
+      <div class="task-col col-inprogress"><div class="task-col-header">⚡ Em Andamento <span id="cnt-prog" style="margin-left:auto;background:rgba(0,0,0,0.08);border-radius:20px;padding:1px 8px;font-size:11px"></span></div><div id="col-prog"></div></div>
+      <div class="task-col col-done"><div class="task-col-header">✅ Concluídas <span id="cnt-done" style="margin-left:auto;background:rgba(0,0,0,0.08);border-radius:20px;padding:1px 8px;font-size:11px"></span></div><div id="col-done"></div></div>
+    </div>
+  </div>
+
+  <!-- MEUS PROJETOS -->
+  <div id="page-meus-projetos" class="page">
+    <div class="topbar"><div class="topbar-left"><h2>Meus Projetos</h2><p>Projetos em que você participa</p></div></div>
+    <div id="meus-proj-lista"></div>
+  </div>
+
+  <!-- MEUS COMENTÁRIOS -->
+  <div id="page-meus-comentarios" class="page">
+    <div class="topbar"><div class="topbar-left"><h2>Comentários</h2><p>Comente nas suas tarefas</p></div></div>
+    <div class="toolbar">
+      <input type="number" id="mc-tarefa-id" placeholder="ID da tarefa..." style="max-width:180px">
+      <button class="btn btn-primary" onclick="loadMeusComentarios()">Buscar</button>
+    </div>
+    <div class="card"><table>
+      <thead><tr><th>ID</th><th>Conteúdo</th><th>Tarefa</th><th>Data</th><th>Ações</th></tr></thead>
+      <tbody id="tb-meus-comentarios"></tbody>
+    </table></div>
+  </div>`;
+}
+
+// ─── DASHBOARD ────────────────────────────────────────────────────────────────
+async function loadDash() {
+  try {
+    const [us, ps, ts] = await Promise.all([http('GET','/api/usuarios'), http('GET','/api/projetos'), http('GET','/api/tarefas')]);
+    cachedUsuarios = us; cachedProjetos = ps; cachedTarefas = ts;
+    document.getElementById('ds-u').textContent = us.length;
+    document.getElementById('ds-p').textContent = ps.length;
+    document.getElementById('ds-t').textContent = ts.length;
+
+    try {
+      const criticas = await http('GET','/api/tarefas/relatorios/criticas-sem-responsavel');
+      document.getElementById('ds-c').textContent = criticas.length;
+      const el = document.getElementById('ds-criticas');
+      if (!criticas.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">✅</div>Nenhuma tarefa crítica sem responsável</div>'; }
+      else el.innerHTML = criticas.slice(0,6).map(c =>
+        `<div class="alert-row"><div class="alert-dot dot-red"></div><span style="font-size:13px;font-weight:600;flex:1">${c.titulo||c.titulo}</span>${badgePr(c.prioridade)}</div>`).join('');
+    } catch(e) { document.getElementById('ds-criticas').innerHTML = '<div class="empty">Indisponível</div>'; }
+
+    try {
+      const ranking = await http('GET','/api/usuarios/relatorios/ranking-andamento');
+      const el = document.getElementById('ds-ranking');
+      if (!ranking.length) { el.innerHTML = '<div class="empty">Sem dados</div>'; }
+      else el.innerHTML = ranking.slice(0,6).map((r,i) => {
+        const nome = r.nome || r.nomeUsuario || r.name || Object.values(r)[0];
+        const qtd  = r.tarefasEmAndamento ?? r.quantidade ?? r.total ?? Object.values(r)[1] ?? '—';
+        return `<div class="alert-row"><div class="alert-dot dot-green"></div><span style="font-size:13px;font-weight:600;flex:1">${i+1}. ${nome}</span><span class="badge b-andamento">${qtd} tarefas</span></div>`;
+      }).join('');
+    } catch(e) { document.getElementById('ds-ranking').innerHTML = '<div class="empty">Indisponível</div>'; }
+  } catch(e) { toast('Erro ao carregar dashboard: '+e.message, 'err'); }
+}
+
+// ─── USUÁRIOS ─────────────────────────────────────────────────────────────────
+async function loadUsuarios() {
+  try {
+    const data = await http('GET','/api/usuarios');
+    cachedUsuarios = data;
+    const tb = document.getElementById('tb-usuarios');
+    if (!data.length) { tb.innerHTML = '<tr><td colspan="5"><div class="empty"><div class="empty-icon">👥</div>Nenhum usuário</div></td></tr>'; return; }
+    tb.innerHTML = data.map(u=>`<tr>
+      <td><span style="color:var(--lgray)">#${u.id}</span></td>
+      <td><strong>${u.nome}</strong></td><td>${u.email}</td>
+      <td>${badgeRole(u.role)}</td>
+      <td><div class="actions">
+        <button class="btn btn-ghost btn-sm" onclick="editarUsuario(${u.id})">✏️ Editar</button>
+        <button class="btn btn-danger btn-sm" onclick="excluirUsuario(${u.id},'${u.nome.replace(/'/g,"\\'")}')">🗑️</button>
+      </div></td></tr>`).join('');
+  } catch(e) { toast('Erro: '+e.message,'err'); }
+}
+
+function abrirNovoUsuario() {
+  ['u-id','u-nome','u-email','u-role'].forEach(i => document.getElementById(i).value='');
+  document.getElementById('m-usuario-titulo').textContent = 'Novo Usuário';
+  openM('m-usuario');
+}
+
+async function editarUsuario(id) {
+  try {
+    const u = await http('GET',`/api/usuarios/${id}`);
+    document.getElementById('u-id').value=u.id; document.getElementById('u-nome').value=u.nome;
+    document.getElementById('u-email').value=u.email; document.getElementById('u-role').value=u.role;
+    document.getElementById('m-usuario-titulo').textContent = 'Editar Usuário';
+    openM('m-usuario');
+  } catch(e) { toast(e.message,'err'); }
+}
+
+async function salvarUsuario() {
+  const id = document.getElementById('u-id').value;
+  const b = { nome: document.getElementById('u-nome').value.trim(), email: document.getElementById('u-email').value.trim(), role: document.getElementById('u-role').value };
+  if (!b.nome||!b.email||!b.role) { toast('Preencha todos os campos','err'); return; }
+  try {
+    id ? await http('PUT',`/api/usuarios/${id}`,b) : await http('POST','/api/usuarios',b);
+    toast(id?'Usuário atualizado!':'Usuário criado!'); closeM('m-usuario'); loadUsuarios();
+  } catch(e) { toast(e.message,'err'); }
+}
+
+async function excluirUsuario(id,nome) {
+  if (!confirm(`Excluir "${nome}"?`)) return;
+  try { await http('DELETE',`/api/usuarios/${id}`); toast('Usuário excluído!'); loadUsuarios(); } catch(e) { toast(e.message,'err'); }
+}
+
+// ─── PROJETOS ─────────────────────────────────────────────────────────────────
+async function loadProjetos() {
+  try {
+    const data = await http('GET','/api/projetos');
+    cachedProjetos = data;
+    const tb = document.getElementById('tb-projetos');
+    if (!data.length) { tb.innerHTML = '<tr><td colspan="6"><div class="empty"><div class="empty-icon">📁</div>Nenhum projeto</div></td></tr>'; return; }
+    tb.innerHTML = data.map(p=>`<tr>
+      <td><span style="color:var(--lgray)">#${p.id}</span></td>
+      <td><strong>${p.nome}</strong>${p.descricao?`<div style="font-size:11px;color:var(--lgray);margin-top:2px">${p.descricao.slice(0,55)}${p.descricao.length>55?'...':''}</div>`:''}</td>
+      <td>${badgeSt(p.status)}</td><td>${p.dataInicio||'—'}</td><td>${p.dataPrazo||'—'}</td>
+      <td><div class="actions">
+        <button class="btn btn-ghost btn-sm" onclick="editarProjeto(${p.id})">✏️ Editar</button>
+        <button class="btn btn-danger btn-sm" onclick="excluirProjeto(${p.id},'${p.nome.replace(/'/g,"\\'")}')">🗑️</button>
+      </div></td></tr>`).join('');
+  } catch(e) { toast('Erro: '+e.message,'err'); }
+}
+
+function abrirNovoProjeto() {
+  ['p-id','p-nome','p-desc','p-status','p-inicio','p-prazo'].forEach(i=>document.getElementById(i).value='');
+  document.getElementById('m-projeto-titulo').textContent='Novo Projeto'; openM('m-projeto');
+}
+
+async function editarProjeto(id) {
+  try {
+    const p = await http('GET',`/api/projetos/${id}`);
+    document.getElementById('p-id').value=p.id; document.getElementById('p-nome').value=p.nome;
+    document.getElementById('p-desc').value=p.descricao||''; document.getElementById('p-status').value=p.status;
+    document.getElementById('p-inicio').value=p.dataInicio||''; document.getElementById('p-prazo').value=p.dataPrazo||'';
+    document.getElementById('m-projeto-titulo').textContent='Editar Projeto'; openM('m-projeto');
+  } catch(e) { toast(e.message,'err'); }
+}
+
+async function salvarProjeto() {
+  const id = document.getElementById('p-id').value;
+  const b = { nome:document.getElementById('p-nome').value.trim(), descricao:document.getElementById('p-desc').value.trim()||null, status:document.getElementById('p-status').value, dataInicio:document.getElementById('p-inicio').value||null, dataPrazo:document.getElementById('p-prazo').value||null };
+  if (!b.nome||!b.status) { toast('Nome e status obrigatórios','err'); return; }
+  try {
+    id ? await http('PUT',`/api/projetos/${id}`,b) : await http('POST','/api/projetos',b);
+    toast(id?'Projeto atualizado!':'Projeto criado!'); closeM('m-projeto'); loadProjetos();
+  } catch(e) { toast(e.message,'err'); }
+}
+
+async function excluirProjeto(id,nome) {
+  if (!confirm(`Excluir "${nome}"?`)) return;
+  try { await http('DELETE',`/api/projetos/${id}`); toast('Projeto excluído!'); loadProjetos(); } catch(e) { toast(e.message,'err'); }
+}
+
+// ─── TAREFAS ADMIN ────────────────────────────────────────────────────────────
+let allTarefas = [];
+
+async function loadTarefas() {
+  try {
+    const data = await http('GET','/api/tarefas');
+    allTarefas = data; cachedTarefas = data;
+    renderTbTarefas(data);
+  } catch(e) { toast('Erro: '+e.message,'err'); }
+}
+
+function renderTbTarefas(data) {
+  const tb = document.getElementById('tb-tarefas');
+  if (!data.length) { tb.innerHTML = '<tr><td colspan="8"><div class="empty"><div class="empty-icon">✅</div>Nenhuma tarefa</div></td></tr>'; return; }
+  tb.innerHTML = data.map(t=>`<tr>
+    <td><span style="color:var(--lgray)">#${t.id}</span></td>
+    <td><strong>${t.titulo}</strong></td>
+    <td>${badgeSt(t.status||'TODO')}</td>
+    <td>${badgePr(t.prioridade)}</td>
+    <td style="font-size:12px">${t.nomeProjeto||t.projeto?.nome||'—'}</td>
+    <td style="font-size:12px">${t.nomeResponsavel||t.responsavel?.nome||'<span style="color:var(--lgray)">—</span>'}</td>
+    <td style="font-size:12px">${t.dataEntrega||'—'}</td>
+    <td><div class="actions">
+      <button class="btn btn-ghost btn-sm" onclick="editarTarefa(${t.id})">✏️</button>
+      <button class="btn btn-danger btn-sm" onclick="excluirTarefa(${t.id},'${t.titulo.replace(/'/g,"\\'")}')">🗑️</button>
+    </div></td></tr>`).join('');
+}
+
+function filtrarStTarefa(s) { renderTbTarefas(s ? allTarefas.filter(t=>t.status===s) : allTarefas); }
+
+async function abrirNovaTarefa() {
+  ['t-id','t-titulo','t-desc','t-status','t-prio','t-proj','t-resp','t-entrega','t-horas'].forEach(i=>document.getElementById(i).value='');
+  document.getElementById('m-tarefa-titulo').textContent='Nova Tarefa';
+  await preencherSelects();
+  openM('m-tarefa');
+}
+
+async function editarTarefa(id) {
+  try {
+    const t = await http('GET',`/api/tarefas/${id}`);
+    await preencherSelects();
+    document.getElementById('t-id').value=t.id; document.getElementById('t-titulo').value=t.titulo;
+    document.getElementById('t-desc').value=t.descricao||''; document.getElementById('t-status').value=t.status||'';
+    document.getElementById('t-prio').value=t.prioridade||'';
+    document.getElementById('t-proj').value=t.projetoId||t.projeto?.id||'';
+    document.getElementById('t-resp').value=t.responsavelId||t.responsavel?.id||'';
+    document.getElementById('t-entrega').value=t.dataEntrega||''; document.getElementById('t-horas').value=t.horasEstimadas||'';
+    document.getElementById('m-tarefa-titulo').textContent='Editar Tarefa'; openM('m-tarefa');
+  } catch(e) { toast(e.message,'err'); }
+}
+
+async function preencherSelects() {
+  if (!cachedProjetos.length) cachedProjetos = await http('GET','/api/projetos');
+  if (!cachedUsuarios.length) cachedUsuarios = await http('GET','/api/usuarios');
+  const ativos = cachedProjetos.filter(p=>p.status!=='CONCLUIDO'&&p.status!=='CANCELADO');
+  document.getElementById('t-proj').innerHTML = '<option value="">Selecione o projeto...</option>' +
+    ativos.map(p=>`<option value="${p.id}">${p.nome} (${p.status})</option>`).join('');
+  document.getElementById('t-resp').innerHTML = '<option value="">Nenhum</option>' +
+    cachedUsuarios.map(u=>`<option value="${u.id}">${u.nome} (${u.role})</option>`).join('');
+}
+
+async function salvarTarefa() {
+  const id = document.getElementById('t-id').value;
+  const st = document.getElementById('t-status').value;
+  const pr = document.getElementById('t-prio').value;
+  const re = document.getElementById('t-resp').value;
+  const hr = document.getElementById('t-horas').value;
+  const en = document.getElementById('t-entrega').value;
+  const b = {
+    titulo: document.getElementById('t-titulo').value.trim(),
+    descricao: document.getElementById('t-desc').value.trim()||null,
+    projetoId: Number(document.getElementById('t-proj').value)||null,
+    ...(st&&{status:st}), ...(pr&&{prioridade:pr}),
+    ...(re&&{responsavelId:Number(re)}), ...(hr&&{horasEstimadas:Number(hr)}),
+    ...(en&&{dataEntrega:en}),
+  };
+  if (!b.titulo) { toast('Título obrigatório','err'); return; }
+  if (!b.projetoId) { toast('Selecione um projeto','err'); return; }
+  try {
+    id ? await http('PATCH',`/api/tarefas/${id}`,b) : await http('POST','/api/tarefas',b);
+    toast(id?'Tarefa atualizada!':'Tarefa criada!'); closeM('m-tarefa'); loadTarefas();
+  } catch(e) { toast(e.message,'err'); }
+}
+
+async function excluirTarefa(id,titulo) {
+  if (!confirm(`Excluir "${titulo}"?`)) return;
+  try { await http('DELETE',`/api/tarefas/${id}`); toast('Tarefa excluída!'); loadTarefas(); } catch(e) { toast(e.message,'err'); }
+}
+
+// ─── COMENTÁRIOS ADMIN ───────────────────────────────────────────────────────
+async function loadComentariosAdmin() {
+  const id = document.getElementById('ca-tarefa-id').value;
+  if (!id) { toast('Digite o ID da tarefa','err'); return; }
+  try {
+    const data = await http('GET',`/api/comentarios/tarefa/${id}`);
+    const tb = document.getElementById('tb-comentarios-admin');
+    if (!data.length) { tb.innerHTML='<tr><td colspan="5"><div class="empty">Nenhum comentário</div></td></tr>'; return; }
+    tb.innerHTML = data.map(c=>`<tr>
+      <td><span style="color:var(--lgray)">#${c.id}</span></td>
+      <td style="max-width:320px">${c.conteudo}</td>
+      <td>${c.nomeAutor||c.autor?.nome||'—'}</td>
+      <td style="font-size:12px">${c.criadoEm?new Date(c.criadoEm).toLocaleDateString('pt-BR'):'—'}</td>
+      <td><button class="btn btn-danger btn-sm" onclick="excluirComentario(${c.id})">🗑️</button></td></tr>`).join('');
+  } catch(e) { toast(e.message,'err'); }
+}
+
+async function excluirComentario(id) {
+  if (!confirm('Excluir comentário?')) return;
+  try { await http('DELETE',`/api/comentarios/${id}`); toast('Excluído!'); loadComentariosAdmin(); } catch(e) { toast(e.message,'err'); }
+}
+
+// ─── RELATÓRIOS ───────────────────────────────────────────────────────────────
+async function loadRelatorio(tipo) {
+  document.querySelectorAll('#page-relatorios .btn').forEach(b => b.className = 'btn btn-ghost btn-sm');
+  event.target.className = 'btn btn-primary btn-sm';
+  const el = document.getElementById('rel-resultado');
+  el.innerHTML = '<div class="empty">Carregando...</div>';
+  const eps = {
+    criticas:       '/api/tarefas/relatorios/criticas-sem-responsavel',
+    ranking:        '/api/usuarios/relatorios/ranking-andamento',
+    progresso:      '/api/projetos/relatorios/progresso',
+    risco:          '/api/projetos/relatorios/em-risco',
+    sobrecarregados:'/api/usuarios/relatorios/sobrecarregados',
+  };
+  try {
+    const data = await http('GET', eps[tipo]);
+    if (!data.length) { el.innerHTML='<div class="empty"><div class="empty-icon">✅</div>Nenhum resultado</div>'; return; }
+    const hs = Object.keys(data[0]);
+    el.innerHTML = `<table class="rel-table"><thead><tr>${hs.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>
+      ${data.map(row=>`<tr>${hs.map(h=>`<td>${row[h]??'—'}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+  } catch(e) { el.innerHTML=`<div class="empty" style="color:var(--red)">Erro: ${e.message}</div>`; }
+}
+
+// ─── MINHAS TAREFAS (USUÁRIO) ─────────────────────────────────────────────────
+async function loadMinhasTarefas() {
+  try {
+    const data = await http('GET',`/api/tarefas/responsavel/${ME.id}`);
+    const todo = data.filter(t=>t.status==='TODO'||!t.status);
+    const prog = data.filter(t=>t.status==='IN_PROGRESS');
+    const done = data.filter(t=>t.status==='DONE'||t.status==='CANCELLED');
+
+    document.getElementById('cnt-todo').textContent = todo.length;
+    document.getElementById('cnt-prog').textContent = prog.length;
+    document.getElementById('cnt-done').textContent = done.length;
+
+    const card = (t) => `<div class="task-item">
+      <div class="task-item-title">${t.titulo}</div>
+      <div class="task-item-meta">
+        ${badgePr(t.prioridade)}
+        <span>📁 ${t.nomeProjeto||'—'}</span>
+        ${t.dataEntrega?`<span>📅 ${t.dataEntrega}</span>`:''}
+      </div>
+      <div style="display:flex;gap:6px;margin-top:8px">
+        <button class="btn btn-primary btn-sm" onclick="abrirAtualizarStatus(${t.id},'${t.titulo.replace(/'/g,"\\'")}','${t.status||'TODO'}')">🔄 Status</button>
+        <button class="btn btn-ghost btn-sm" onclick="abrirComentarTarefa(${t.id},'${t.titulo.replace(/'/g,"\\'")}')">💬 Comentar</button>
+      </div>
+    </div>`;
+
+    document.getElementById('col-todo').innerHTML = todo.length ? todo.map(card).join('') : '<div class="empty" style="padding:24px;font-size:13px">Nenhuma</div>';
+    document.getElementById('col-prog').innerHTML = prog.length ? prog.map(card).join('') : '<div class="empty" style="padding:24px;font-size:13px">Nenhuma</div>';
+    document.getElementById('col-done').innerHTML = done.length ? done.map(card).join('') : '<div class="empty" style="padding:24px;font-size:13px">Nenhuma</div>';
+  } catch(e) { toast('Erro ao carregar tarefas: '+e.message,'err'); }
+}
+
+function abrirAtualizarStatus(id, titulo, statusAtual) {
+  document.getElementById('ms-id').value = id;
+  document.getElementById('ms-titulo-label').textContent = `Tarefa: ${titulo}`;
+  document.getElementById('ms-status').value = statusAtual;
+  document.getElementById('ms-horas').value = '';
+  openM('m-status');
+}
+
+async function atualizarStatus() {
+  const id = document.getElementById('ms-id').value;
+  const st = document.getElementById('ms-status').value;
+  const hr = document.getElementById('ms-horas').value;
+  const b = { status: st, ...(hr && { horasTrabalhadas: Number(hr) }) };
+  try {
+    await http('PATCH',`/api/tarefas/${id}`,b);
+    toast('Status atualizado!'); closeM('m-status'); loadMinhasTarefas();
+  } catch(e) { toast(e.message,'err'); }
+}
+
+function abrirComentarTarefa(id, titulo) {
+  document.getElementById('c-tarefa-id').value = id;
+  document.getElementById('c-tarefa-nome').value = `#${id} — ${titulo}`;
+  document.getElementById('c-conteudo').value = '';
+  openM('m-comentario');
+}
+
+async function salvarComentario() {
+  const b = {
+    conteudo: document.getElementById('c-conteudo').value.trim(),
+    tarefaId: Number(document.getElementById('c-tarefa-id').value),
+    autorId:  ME ? ME.id : 1,
+  };
+  if (!b.conteudo) { toast('Digite o comentário','err'); return; }
+  try { await http('POST','/api/comentarios',b); toast('Comentário publicado!'); closeM('m-comentario'); } catch(e) { toast(e.message,'err'); }
+}
+
+// ─── MEUS PROJETOS ────────────────────────────────────────────────────────────
+async function loadMeusProjetos() {
+  try {
+    const tarefas = await http('GET',`/api/tarefas/responsavel/${ME.id}`);
+    const ids = [...new Set(tarefas.map(t=>t.projetoId||t.projeto?.id).filter(Boolean))];
+    const el = document.getElementById('meus-proj-lista');
+    if (!ids.length) { el.innerHTML='<div class="empty"><div class="empty-icon">📁</div>Você não está em nenhum projeto ainda</div>'; return; }
+    const projetos = await Promise.all(ids.map(id=>http('GET',`/api/projetos/${id}`)));
+    el.innerHTML = projetos.map(p=>`
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-header">
+          <div><h3>${p.nome}</h3><span style="font-size:12px;color:var(--lgray)">${p.descricao||''}</span></div>
+          ${badgeSt(p.status)}
+        </div>
+        <div style="padding:14px 20px;display:flex;gap:24px">
+          <span style="font-size:13px;color:var(--gray)">📅 Início: <strong>${p.dataInicio||'—'}</strong></span>
+          <span style="font-size:13px;color:var(--gray)">🎯 Prazo: <strong>${p.dataPrazo||'—'}</strong></span>
+          <span style="font-size:13px;color:var(--gray)">✅ Suas tarefas: <strong>${tarefas.filter(t=>(t.projetoId||t.projeto?.id)==p.id).length}</strong></span>
+        </div>
+      </div>`).join('');
+  } catch(e) { toast(e.message,'err'); }
+}
+
+// ─── MEUS COMENTÁRIOS ────────────────────────────────────────────────────────
+async function loadMeusComentarios() {
+  const id = document.getElementById('mc-tarefa-id').value;
+  if (!id) { toast('Digite o ID da tarefa','err'); return; }
+  try {
+    const data = await http('GET',`/api/comentarios/tarefa/${id}`);
+    const tb = document.getElementById('tb-meus-comentarios');
+    if (!data.length) { tb.innerHTML='<tr><td colspan="5"><div class="empty">Nenhum comentário nesta tarefa</div></td></tr>'; return; }
+    tb.innerHTML = data.map(c=>`<tr>
+      <td><span style="color:var(--lgray)">#${c.id}</span></td>
+      <td style="max-width:360px">${c.conteudo}</td>
+      <td><span style="color:var(--lgray)">#${id}</span></td>
+      <td style="font-size:12px">${c.criadoEm?new Date(c.criadoEm).toLocaleDateString('pt-BR'):'—'}</td>
+      <td>${(c.autorId==ME?.id||c.autor?.id==ME?.id)?`<button class="btn btn-danger btn-sm" onclick="excluirMeuComentario(${c.id})">🗑️</button>`:''}</td>
+    </tr>`).join('');
+  } catch(e) { toast(e.message,'err'); }
+}
+
+async function excluirMeuComentario(id) {
+  if (!confirm('Excluir seu comentário?')) return;
+  try { await http('DELETE',`/api/comentarios/${id}`); toast('Excluído!'); loadMeusComentarios(); } catch(e) { toast(e.message,'err'); }
+}
+
+// ─── UTILS ───────────────────────────────────────────────────────────────────
+function filterT(tbId, q) {
+  document.getElementById(tbId)?.querySelectorAll('tr').forEach(r=>{
+    r.style.display = r.textContent.toLowerCase().includes(q.toLowerCase()) ? '' : 'none';
+  });
+}
+</script>
+</body>
+</html>
